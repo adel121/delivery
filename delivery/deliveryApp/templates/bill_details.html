@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="jumbotron container" style="text-align: center"> 
+	<h4>Bill ID:  {{ bill.Id}} </h4><hr>
+	<h4>Date:  {{bill.Date}} </h4> <hr>
+	<h4>Address:  {{bill.address}} </h4> <hr>
+	<h4>Client:  {{bill.client.Name}}</h4> <hr>
+	<h4>Delivered In:  {{bill.delivery_in.Name}}</h4> <hr>
+	<h4>Delivered Out:  {{bill.delivery_out.Name}}</h4> <hr>
+	<h4>End Client:  {{bill.end_client.Name}}</h4> <hr>
+	<h4>Product Cost:  {{bill.Product_cost}}</h4> <hr>
+	<h4>Delivery Cost:  {{bill.Delivery_cost}}</h4> <hr>
+	<h4>Status:  {{bill.Status}} </h3><hr>
+</div>
+{% endblock %}

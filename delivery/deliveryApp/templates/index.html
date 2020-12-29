@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load deliverytags %}
+{% block content %}
+<div  style="align-items:center"> 
+</div>
+
+<div class="container jumbotron list-group-item-danger" style="color:black;overflow-y:scroll; height:90%; margin-bottom:15px; font-size:20px; width:70% ; background-color:blue; margin-top:15px ">
+<ol class="list-group">
+	<form class="form-group" style="align:center" action="{% url 'index' category %}" method="POST">
+	{% csrf_token %}
+    <label for="requested_date" style="color:white;"><h3 >Date </h3> <h5> hint: Enter the date under the following format: year-month-day , eg. 2020-12-27 <hr>(To view all bills with all dates, enter: 0-0-0)</h5></label>
+    <input class="form-control" id="requested_date" type="text" name="requested_date" {% if date == '0-0-0' %} value="All Days" {% else %} value={{date|to_str}} {% endif %}>
+    <hr>
+    <input style="align-self: center" type="submit" class="btn btn-light" value="Filter By Date">
+</form>
+<h3 style="color:white; margin-left:25%">View:
+<a href="{% url 'index' 'all' date|get_year date|get_month date|get_day %}"> <button type="button" class="btn btn-light">All Bills</button></a>
+<a href="{% url 'index' 'pending' date|get_year date|get_month date|get_day %}"> <button type="button" class="btn btn-light">Pending Bills</button></a>
+<a href="{% url 'index' 'sent' date|get_year date|get_month date|get_day %}"> <button type="button" class="btn btn-light">Sent Bills</button></a>
+<a href="{% url 'index' 'paid' date|get_year date|get_month date|get_day %}"> <button type="button" class="btn btn-light">Paid Bills</button></a>	
+<hr>
+</h3>
+<ul>
+
+{% for sts in bills %}
+
+{% if date == '0-0-0' or sts.Date|to_date == date|to_str %}
+<li class="list-group-item" style="text-align: center"><a  href="{% url 'bill_details' sts.Id sts.Status  %}">ID: {{sts.Id}} --- Date:  {{sts.Date}} --- Status: {{sts.Status}}</a>
+	&nbsp; &nbsp; &nbsp; &nbsp;
+<div style="margin-right: 0px">
+{% if sts.Status == "pending"  %} 
+<a href="{% url 'bill_details' sts.Id 'sent' %}"> <button type="button" class="btn btn-warning">Sent? </button></a>
+{% elif sts.Status == "sent" %}
+<a href="{% url 'bill_details' sts.Id 'paid' %}"> <button type="button" class="btn btn-info">Paid? </button></a>
+{% else %}
+<button type="button" class="btn btn-success"> Bill Already Paid</button>
+{% endif %}
+
+</div>
+</li>
+{% endif %}
+{% endfor %}
+</ul>
+</ol>
+</div>
+
+
+{% endblock %}
